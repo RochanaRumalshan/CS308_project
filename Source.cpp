@@ -9,6 +9,12 @@
 
 
 //colors
+
+float red[] = { 0.5, 0.0, 0.0 };
+float trainEngine[] = { 0.0,0.0,0.0 };//engine
+float crashbars[] = { 0.4, 0.4, 0.4 };//crashbars
+float steampipe[] = { 0.1,0.1,0.1 };
+float box[] = { 0.1,0.1,0 };
 float road[] = { 0.25f,0.262f,.266f };
 float grass[] = { 0,0.406,0.039 };
 float marble[] = { 0.988,0.914,0.777 };
@@ -31,7 +37,7 @@ GLfloat specular[] = { 0.60, 0.6, 0.6,1.0 };
 GLfloat specref[] = { 0.8, 0.8, 0.8, 1.0 };
 GLfloat position[] = { 10, 100, 150, 1.0 };
 
-float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, zrot = 0 , angle = 0.0;
+float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, zrot = 0 , drive = 0.0 , angle=0.0;
 float lastx, lasty;
 
 
@@ -99,7 +105,7 @@ void platform() {
 	glTranslated(47, 0, -62);
 	glRotated(-90, 0, 1, 0);
 	glLineWidth(1.5f);
-	glScaled(.03, .006, .004);
+	glScaled(.03, .022, .004);
 	for (int i = 0;i < 16;i++)
 		glutStrokeCharacter(GLUT_STROKE_ROMAN, _stationName[i]);
 	glPopMatrix();
@@ -135,6 +141,266 @@ void roof() {
 	glPopMatrix();
 
 }
+
+
+//******train
+void train(GLfloat x, GLfloat y, GLfloat z){
+	GLUquadricObj* qobj = gluNewQuadric();
+
+	glPushMatrix();
+
+	glPushMatrix();
+	glColor3fv(cement);
+	glTranslated(x + 40, y, z - 20);
+	glRotated(180, 0, 1, 0);
+	glScaled(1.2, .5, .6);
+	glutSolidCube(25.0);
+	glPopMatrix();
+
+	//engine- cylinder
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 5, y, z - 20);
+	glRotatef(90, 0.0, 1, 0.0);
+	//glScaled(0.3, 0.3, 0.3);
+	gluCylinder(qobj, 5, 5, 25, 100, 36);
+	glPopMatrix();
+
+	//chimini
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 12, y + 9, z - 20);
+	glRotatef(90, 1.0, 0.0, 0.0);
+	gluCylinder(qobj, 1, 1, 5, 36, 36);
+	gluCylinder(qobj, 1, 2.2, 1.5, 36, 36);
+	glPopMatrix();
+
+	//valve
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 20, y + 7, z - 20);
+	glRotatef(90, 1.0, 0.0, 0.0);
+	gluCylinder(qobj, 2, 2, 3, 36, 36);
+	gluCylinder(qobj, 0.1, 2, 0.1, 36, 36);
+	glPopMatrix();
+
+	//light
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 5, y + 6, z - 20);
+	glRotatef(90, 0.0, 1.0, 0.0);
+	gluCylinder(qobj, 1, 1, 2, 36, 36);
+	glPopMatrix();
+
+	//engineBase
+	glPushMatrix();
+	glColor3fv(red);
+	glTranslated(x + 15, y - 5, z - 20);
+	glScaled(1, .1, .5);
+	glutSolidCube(25.0);
+	glPopMatrix();
+
+	//engineCup
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 5, y, z - 20);
+	glScaled(0.3, 1, 1);
+	glutSolidSphere(5.0, 100, 300);
+	glPopMatrix();
+
+	//lightCup
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 7, y + 6, z - 20);
+	glScaled(0.3, 1, 1);
+	glutSolidSphere(1.0, 100, 300);
+	glPopMatrix();
+
+	//headCup cylinders left
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x, y - 5, z - 24);
+	glRotatef(90, 0.0, 1, 0.0);
+	gluCylinder(qobj, 1, 1, 3, 50, 36);
+	glRotatef(90, 0.0, 1, 0.0);
+	glScaled(0.3, 1, 1);
+	glutSolidSphere(1.2, 100, 300);
+	glPopMatrix();
+
+	//headCup cylinders right
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x, y - 5, z - 16);
+	glRotatef(90, 0.0, 1, 0.0);
+	gluCylinder(qobj, 1, 1, 3, 50, 36);
+	glRotatef(90, 0.0, 1, 0.0);
+	glScaled(0.3, 1, 1);
+	glutSolidSphere(1.2, 100, 300);
+	glPopMatrix();
+
+	//crash bars right
+	float t = 53;
+	float v = 45;
+	for (float i = 0; i < 7;i++) {
+
+		glPushMatrix();
+		glRotatef(-25, 0.0, 0.0, 1.0);
+		glColor3fv(crashbars);
+		glTranslated(x + 3.42 + v + (i / 5), y -6 + t+ (i / 5), z -20 - i );
+		glRotatef(90, 1.0, 0.0, 0.0);
+		gluCylinder(qobj, 0.2, 0.2, 5, 50, 36);
+		glPopMatrix();
+	}
+	//crash bars left
+	for (float i = 0; i < 7; i++) {
+
+		glPushMatrix();
+		glRotatef(-25, 0.0, 0.0, 1.0);
+		glColor3fv(crashbars);
+		glTranslated(x + 3.42  + (i / 5), y -6+ t + (i / 5), z - 20 + i );
+		//glRotatef(90, 1.0, 0.0, 0.0);
+		gluCylinder(qobj, 0.2, 0.2, 5, 50, 36);
+		glPopMatrix();
+	}
+
+
+	//barholders
+	glPushMatrix();
+	glColor3fv(red);
+	glTranslated(x + 2, y - 7, z - 20);
+	glScaled(0.25, .15, 1);
+	glutSolidCube(14);
+	glPopMatrix();
+
+
+	//nuts 1
+	for (float i = 0; i <= 12; i++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 2.5, y - 4, z - 26 + i);
+		glutSolidSphere(0.1, 100, 100);
+		glPopMatrix();
+	}
+
+	//nuts 1-left
+	for (float i = 0; i < 3; i++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 2.5, y - 4.47 - (i / 2), z - 26);
+		glutSolidSphere(0.1, 100, 100);
+		glPopMatrix();
+	}
+	//nuts 1-right
+	for (float i = 0; i < 3; i++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 2.5, y - 4.47 - (i / 2), z - 14);
+		glutSolidSphere(0.1, 100, 100);
+		glPopMatrix();
+	}
+
+	//nuts 2
+	for (float i = 0; i < 14; i++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 0.2, y - 6.2, z - 26.4 + i);
+		glutSolidSphere(0.1, 100, 100);
+		glPopMatrix();
+	}
+
+	//nuts 3
+
+	for (float i = 0; i < 3; i++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 0.2, y - 6.7 - (i / 2), z - 26.4);
+		glutSolidSphere(0.1, 100, 100);
+		glPopMatrix();
+	}
+
+	//nuts 3
+
+	for (float i = 0; i < 3; i++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 0.2, y - 6.7 - (i / 2), z - 14 + 0.56);
+		glutSolidSphere(0.1, 100, 100);
+		glPopMatrix();
+	}
+	//underbars
+	glPushMatrix();
+	glPushMatrix();
+	glColor3fv(red);
+	glTranslated(x - 0.5, y - 11, z - 23.5);
+	glRotatef(-16, 0.0, 1, 0.0);
+	glScaled(0.1, 0.1, 1);
+	glutSolidCube(9);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3fv(red);
+	glTranslated(x - 0.5, y - 11, z - 16.5);
+	glRotatef(16, 0.0, 1, 0.0);
+	glScaled(0.1, 0.1, 1);
+	glutSolidCube(9);
+	glPopMatrix();
+	glPopMatrix();
+	//wheels left
+	for (float j = 0; j < 8;j++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 5 + (j * 7), y - 10.5, z - 14);
+		glScaled(1, 1, 0.5);
+		glutSolidSphere(0.6, 100, 100);
+		glutSolidTorus(0.7, 3.20, 60, 60);
+		glRotatef(90, 0.0, 1.0, 0.0);
+		for (int i = 0; i < 20; i++) {
+			glRotatef(i * (18), 1.0, 0.0, 0.0);
+			gluCylinder(qobj, 0.2, 0.12, 3.7, 50, 36);
+		}
+		glPopMatrix();
+	}
+	//wheels right
+	for (float j = 0; j < 8; j++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 5 + (j * 7), y - 10.5, z - 26);
+		glScaled(1, 1, 0.5);
+		glutSolidSphere(0.6, 100, 100);
+		glutSolidTorus(0.7, 3.20, 60, 60);
+		glRotatef(90, 0.0, 1.0, 0.0);
+		for (int i = 0; i < 20; i++) {
+			glRotatef(i * (18), 1.0, 0.0, 0.0);
+			gluCylinder(qobj, 0.2, 0.12, 3.7, 50, 36);
+		}
+
+		glPopMatrix();
+	}
+
+	//steampipes
+	glPushMatrix();
+	glColor3fv(steampipe);
+	glTranslated(x + 5, y + 1, z - 14.8);
+	glRotatef(90, 0.0, 1, 0.0);
+	gluCylinder(qobj, 0.3, 0.3, 20, 100, 36);
+	//glScaled(1, 0.1, 1);
+	glScaled(1, 1, 0.1);
+	glutSolidSphere(0.3, 100, 100);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3fv(steampipe);
+	glTranslated(x + 5, y + 1, z - 25.2);
+	glRotatef(90, 0.0, 1, 0.0);
+	gluCylinder(qobj, 0.3, 0.3, 20, 100, 36);
+	glScaled(1, 1, 0.1);
+	glutSolidSphere(0.3, 100, 100);
+	glPopMatrix();
+
+	glPopMatrix();
+
+}
+
 
 
 
@@ -231,9 +497,14 @@ void display(void) {
 	//****************************terrain
 	drawTerrain();
 	fence();
+	glRotatef(90,0.0,1.0,0.0);
+	//glTranslatef(0.0, 0.0, 0.0);
+	glTranslatef(drive,0.0,0.0);
+	train(110.0,9.5,57.0);
 
 	glutSwapBuffers();
-	angle++;
+	drive = drive -0.1;
+	//angle = angle + 0.1;
 }
 
 void reshape(int w, int h) {
@@ -304,6 +575,10 @@ void keyboard(unsigned char key, int x, int y) {
 	{
 		yrot -= 1;
 		if (yrot < -360)yrot += 360;
+	}
+
+	if(key == 'r'){
+		drive = 0.0;
 	}
 
 	if (key == 27)
