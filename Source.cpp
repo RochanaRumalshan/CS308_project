@@ -53,6 +53,42 @@ float building1[] = { .929,.832,.715 };
 float building2[] = { .976,.5,.445 };
 float FontColor[] = { .976,.5,.445 };
 
+void platform() {
+	glPushMatrix();
+	glColor3fv(building1);
+	glTranslated(50, -10,-50);
+	glScaled(2, 1, 1);
+	glutSolidCube(6.0);
+	/*glPopMatrix();
+
+	glPushMatrix();*/
+	glColor3fv(building2);
+	//glTranslated(40, -10, -50);
+	glScaled(1,0.5, 7);
+	glutSolidCube(10.0);
+	glPopMatrix();
+}
+
+void sarasaviUyanaNameBoard() {
+
+	char _facName[20];
+	strcpy_s(_facName, "Sarasavi Uyana");
+	glPushMatrix();
+
+	glColor3fv(FontColor);
+	glRotated(90, 0, 1, 0);
+	glRotated(180, 0, 1, 0);
+
+	glTranslated(100, 10, -50);
+	glScaled(.9, .2, .2);
+	for (int i = 0; i < 15; i++)
+		glutStrokeCharacter(GLUT_STROKE_ROMAN, _facName[i]);
+	glPopMatrix();
+
+
+	glPushMatrix();
+}
+
 
 void display(void) {
 	glClearColor(0.0, 0.79, 1.0, 1.0);
@@ -67,37 +103,11 @@ void display(void) {
 	//gluCylinder(cylin, 0.5, 0.5, 10, 20, 20);
 	//gluDisk(cylin, 0.5, 1.0, 20, 20);
 
-	glPushMatrix();
-	glColor3fv(building1);
-	glutSolidCube(6.0);
-	glTranslated(0, 0, 0);
-	glPopMatrix();
-
-
-	glPushMatrix();
-	glColor3fv(building1);
-	glTranslated(0, 0, 5);
-	glutSolidCube(6.0);
-	glPopMatrix();
+	platform();
+	sarasaviUyanaNameBoard();
 
 	
-	char _facName[20];
-	strcpy_s(_facName, "Sarasavi Uyana");
-	glPushMatrix();
-
-	glColor3fv(FontColor);
-	glRotated(90, 0, 1, 0);
-	glRotated(180, 0, 1, 0);
-
-	glTranslated(-1, +3, 1);
-	glScaled(.009, .02, .02);
-	for (int i = 0; i < 15; i++)
-		glutStrokeCharacter(GLUT_STROKE_ROMAN, _facName[i]);
-	glPopMatrix();
-
-
-	glPushMatrix();
-
+	/*glPushMatrix();
 	glBegin(GL_QUAD_STRIP);
 
 	glColor3fv(building2);
@@ -116,12 +126,10 @@ void display(void) {
 	glVertex3d(-10, -4, -20);
 	glVertex3d(-10, -1, 20);
 	glVertex3d(-10, -1, -20);
-
-
+	
 	glEnd();
-	glPopMatrix();
-
-
+	glPopMatrix();*/
+	
 	glutSwapBuffers();
 	angle++;
 }
@@ -207,8 +215,8 @@ void mouseMovement(int x, int y) {
 	int diffy = y - lasty;
 	lastx = x;
 	lasty = y;
-	xrot += (float)diffy / 20;
-	yrot += (float)diffx / 20;
+	xrot += (float)diffy / 10;
+	yrot += (float)diffx / 10;
 
 }
 
