@@ -69,6 +69,43 @@ void platform() {
 	glPopMatrix();
 }
 
+
+//train
+void train(int x, int y, int z)
+{
+	GLUquadricObj * qobj = gluNewQuadric();
+
+
+	glPushMatrix();
+	glColor3fv(cement);
+	glTranslated(x + 36, y, z - 20);
+	glRotated(180, 0, 1, 0);
+	glScaled(1, .5, .6);
+	glutSolidCube(25.0);
+	glPopMatrix();
+
+	//engine- cylinder
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 5, y, z - 20);
+	glRotatef(90, 0.0, 1, 0.0);
+	//glScaled(0.3, 0.3, 0.3);
+	gluCylinder(qobj, 5, 5, 20, 36, 36);
+	glPopMatrix();
+
+	//chimini
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 7, y + 8, z - 20);
+	glRotatef(90, 1.0, 0.0, 0.0);
+	gluCylinder(qobj, 1, 1, 5, 36, 36);
+	//lamp - cylinder
+	//gluCylinder(qobj, 4.2, 0.8, 5, 36, 36);
+	glPopMatrix();
+
+
+}
+
 void sarasaviUyanaNameBoard() {
 
 	char _facName[20];
@@ -98,6 +135,8 @@ void display(void) {
 	camera();
 	enable();
 
+
+
 	glColor3f(1.0, 0.0, 0.0);
 	GLUquadricObj* cylin = gluNewQuadric();
 	//gluCylinder(cylin, 0.5, 0.5, 10, 20, 20);
@@ -105,6 +144,9 @@ void display(void) {
 
 	platform();
 	sarasaviUyanaNameBoard();
+
+	glRotatef(180, 0.0, 1.0, 0.0);
+	train(0, 0, 0);
 
 	
 	/*glPushMatrix();
