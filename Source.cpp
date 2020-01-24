@@ -12,19 +12,21 @@
 
 float red[] = { 0.5, 0.0, 0.0 };
 float trainEngine[] = { 0.0,0.0,0.0 };//engine
-float crashbars[] = { 0.4, 0.4, 0.4 };//crashbars
+float crashbars[] = { 0.38,0.31, 0.3, 0.0f };//crashbars
 float steampipe[] = { 0.1,0.1,0.1 };
 float box[] = { 0.1,0.1,0 };
 float road[] = { 0.25f,0.262f,.266f };
 float grass[] = { 0,0.406,0.039 };
 float marble[] = { 0.988,0.914,0.777 };
-float cement[] = { .711,.660,.660 };
+//float cement[] = { 0.38,0.31, 0.3, 0.0f };
+float cement[] = { 0.1,0.06, 0.06, 0.0f };
+
 float cement2[] = { 0.5,.519,.480 };
 float water[] = { .777,.926,.906 };
 float building1[] = { .929,.832,.715 };
 float building2[] = { .976,.5,.445 };
 float board[] = { .695,.133,.133 };
-float nameboardWhite[] = { 1.0f,1.0f,1.0f};
+float nameboardWhite[] = { 1.0f,1.0f,1.0f };
 float nameboardBlack[] = { 0.0f,0.0f,0.0f };
 float silper[] = { 0.533, 0.027, 0.027 };
 float fenceColor[] = { 0.235, 0.008, 0.031 };
@@ -37,7 +39,7 @@ GLfloat specular[] = { 0.60, 0.6, 0.6,1.0 };
 GLfloat specref[] = { 0.8, 0.8, 0.8, 1.0 };
 GLfloat position[] = { 10, 100, 150, 1.0 };
 
-float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, zrot = 0 , drive = 0.0 , angle=0.0;
+float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, zrot = 0, drive = 0.0, angle = 0.0;
 float lastx, lasty;
 
 
@@ -106,15 +108,15 @@ void platform() {
 	glRotated(-90, 0, 1, 0);
 	glLineWidth(1.5f);
 	glScaled(.03, .022, .004);
-	for (int i = 0;i < 16;i++)
+	for (int i = 0; i < 16; i++)
 		glutStrokeCharacter(GLUT_STROKE_ROMAN, _stationName[i]);
 	glPopMatrix();
 	//glPushMatrix();
-	
+
 	//platform upper building
 	glPushMatrix();
 	glColor3fv(building1);
-	glTranslated(50,0,-50);
+	glTranslated(50, 0, -50);
 	glScaled(1, 1, 6);
 	glutSolidCube(6.0);
 	/*glPopMatrix();
@@ -123,7 +125,7 @@ void platform() {
 	//platform base
 	glColor3fv(building2);
 	glTranslated(0, -5, 0);
-	glScaled(1,0.5,2); //z get multiplied by 8 times
+	glScaled(1, 0.5, 2); //z get multiplied by 8 times
 	glutSolidCube(10.0);
 	glPopMatrix();
 
@@ -144,7 +146,7 @@ void roof() {
 
 
 //******train
-void train(GLfloat x, GLfloat y, GLfloat z){
+void train(GLfloat x, GLfloat y, GLfloat z) {
 	GLUquadricObj* qobj = gluNewQuadric();
 
 	glPushMatrix();
@@ -152,6 +154,93 @@ void train(GLfloat x, GLfloat y, GLfloat z){
 	glPushMatrix();
 	glColor3fv(cement);
 	glTranslated(x + 40, y, z - 20);
+	glRotated(180, 0, 1, 0);
+	glScaled(1.4, .5, .6);
+	glutSolidCube(25.0);
+	glTranslated(x + 40, y + 5, z - 20);
+	glPopMatrix();
+
+	//roof 1
+	glPushMatrix();
+	glColor3fv(cement);
+	glTranslated(x + 22, y + 6, z - 20);
+	glRotated(90, 0, 1, 0);
+	glScaled(1, 0.2, 1);
+	gluCylinder(qobj, 10, 10, 36, 100, 36);
+	glPopMatrix();
+
+	//roof cover 1
+	glPushMatrix();
+	glColor3fv(cement);
+	glTranslated(x + 22.1, y + 6, z - 20);
+	glRotated(0, 0, 1, 0);
+	glScaled(0.1, 0.25, 1);
+	glutSolidSphere(10, 100, 100);
+	glPopMatrix();
+
+
+
+	//roof 2
+	glPushMatrix();
+	glColor3fv(cement);
+	glTranslated(x + 63, y + 6, z - 20);
+	glRotated(90, 0, 1, 0);
+	glScaled(1, 0.2, 1);
+	gluCylinder(qobj, 10, 10, 30, 100, 36);
+	glPopMatrix();
+
+	//roof cover 2
+	glPushMatrix();
+	glColor3fv(cement);
+	glTranslated(x + 63.1, y + 6, z - 20);
+	glRotated(0, 0, 1, 0);
+	glScaled(0.1, 0.25, 1);
+	glutSolidSphere(10, 100, 100);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3fv(trainEngine);
+	glTranslated(x + 50, y - 2, z - 20);
+	glRotatef(90, 0.0, 1, 0.0);
+	gluCylinder(qobj, 1, 1, 20, 100, 36);
+	glPopMatrix();
+
+	//wheels left box 2
+	for (float j = 0; j < 4; j++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 69 + (j * 7), y - 10.5, z - 14);
+		glScaled(1, 1, 0.5);
+		glutSolidSphere(0.6, 100, 100);
+		glutSolidTorus(0.7, 3.20, 60, 60);
+		glRotatef(90, 0.0, 1.0, 0.0);
+		for (int i = 0; i < 20; i++) {
+			glRotatef(i * (18), 1.0, 0.0, 0.0);
+			gluCylinder(qobj, 0.2, 0.12, 3.7, 50, 36);
+		}
+
+		glPopMatrix();
+	}
+	//wheels right b0x 2
+	for (float j = 0; j < 4; j++) {
+		glPushMatrix();
+		glColor3fv(trainEngine);
+		glTranslated(x + 69 + (j * 7), y - 10.5, z - 26);
+		glScaled(1, 1, 0.5);
+		glutSolidSphere(0.6, 100, 100);
+		glutSolidTorus(0.7, 3.20, 60, 60);
+		glRotatef(90, 0.0, 1.0, 0.0);
+		for (int i = 0; i < 20; i++) {
+			glRotatef(i * (18), 1.0, 0.0, 0.0);
+			gluCylinder(qobj, 0.2, 0.12, 3.7, 50, 36);
+		}
+
+		glPopMatrix();
+	}
+
+	glPushMatrix();
+	glColor3fv(cement);
+	glTranslated(x + 78, y, z - 20);
 	glRotated(180, 0, 1, 0);
 	glScaled(1.2, .5, .6);
 	glutSolidCube(25.0);
@@ -238,15 +327,18 @@ void train(GLfloat x, GLfloat y, GLfloat z){
 	glutSolidSphere(1.2, 100, 300);
 	glPopMatrix();
 
+
+
 	//crash bars right
-	float t = 53;
-	float v = 45;
-	for (float i = 0; i < 7;i++) {
+	glPushMatrix();
+	glTranslated(-15.8, 0, 0);
+	float t = 52.5;//y
+	for (float i = 0; i < 7; i++) {
 
 		glPushMatrix();
 		glRotatef(-25, 0.0, 0.0, 1.0);
 		glColor3fv(crashbars);
-		glTranslated(x + 3.42 + v + (i / 5), y -6 + t+ (i / 5), z -20 - i );
+		glTranslated((x + 3.42 + (i / 5)), (y - 6 + t + (i / 5)), (z - 20 - i));
 		glRotatef(90, 1.0, 0.0, 0.0);
 		gluCylinder(qobj, 0.2, 0.2, 5, 50, 36);
 		glPopMatrix();
@@ -257,11 +349,12 @@ void train(GLfloat x, GLfloat y, GLfloat z){
 		glPushMatrix();
 		glRotatef(-25, 0.0, 0.0, 1.0);
 		glColor3fv(crashbars);
-		glTranslated(x + 3.42  + (i / 5), y -6+ t + (i / 5), z - 20 + i );
-		//glRotatef(90, 1.0, 0.0, 0.0);
+		glTranslated(x + 3.42 + (i / 5), y - 6 + t + (i / 5), z - 20 + i);
+		glRotatef(90, 1.0, 0.0, 0.0);
 		gluCylinder(qobj, 0.2, 0.2, 5, 50, 36);
 		glPopMatrix();
 	}
+	glPopMatrix();
 
 
 	//barholders
@@ -346,7 +439,7 @@ void train(GLfloat x, GLfloat y, GLfloat z){
 	glPopMatrix();
 	glPopMatrix();
 	//wheels left
-	for (float j = 0; j < 8;j++) {
+	for (float j = 0; j < 8; j++) {
 		glPushMatrix();
 		glColor3fv(trainEngine);
 		glTranslated(x + 5 + (j * 7), y - 10.5, z - 14);
@@ -415,7 +508,7 @@ void drawTerrain()
 	glVertex3d(220.0, -7.0, -300);
 	glVertex3d(-50.0, -6, 0);
 	glVertex3d(-50.0, -6, -300);
-	
+
 	glEnd();
 	glPopMatrix();
 }
@@ -441,7 +534,7 @@ void railRoad() {
 
 	//glPushMatrix();
 	glColor3fv(silper);
-	for (int i = 0; i <60;i++) {
+	for (int i = 0; i < 60; i++) {
 		glPushMatrix();
 		glTranslated(36, -5.5, space);
 		glScaled(16, 0.5, 0.5);
@@ -458,21 +551,21 @@ void fence() {
 
 	int upSpace = -1;
 	int inBetweenSpace = -5;
-	for (int i = 0; i < 3;i++) {
+	for (int i = 0; i < 3; i++) {
 		glPushMatrix();
 		glTranslated(56, upSpace, -60);
 		glScaled(0.5, .5, 120);
 		glutSolidCube(1.0);
-		upSpace = upSpace +1;
+		upSpace = upSpace + 1;
 		glPopMatrix();
 	}
 
-	for (int i = 0; i < 23;i++) {
+	for (int i = 0; i < 23; i++) {
 		glPushMatrix();
 		glTranslated(55, -5, inBetweenSpace);
-		glScaled(0.5,15, 0.5);
+		glScaled(0.5, 15, 0.5);
 		glutSolidCube(1.0);
-		inBetweenSpace = inBetweenSpace -5;
+		inBetweenSpace = inBetweenSpace - 5;
 		glPopMatrix();
 	}
 }
@@ -497,13 +590,15 @@ void display(void) {
 	//****************************terrain
 	drawTerrain();
 	fence();
-	glRotatef(90,0.0,1.0,0.0);
+	glRotatef(90, 0.0, 1.0, 0.0);
 	//glTranslatef(0.0, 0.0, 0.0);
-	glTranslatef(drive,0.0,0.0);
-	train(110.0,9.5,57.0);
+	glTranslatef(drive, 0.0, 0.0);
+	glTranslatef(25.0, 0.0, 0.0);
+	train(110.0, 9.5, 57.0);
+
 
 	glutSwapBuffers();
-	drive = drive -0.1;
+	drive = drive - 0.5;
 	//angle = angle + 0.1;
 }
 
@@ -577,7 +672,7 @@ void keyboard(unsigned char key, int x, int y) {
 		if (yrot < -360)yrot += 360;
 	}
 
-	if(key == 'r'){
+	if (key == 'r') {
 		drive = 0.0;
 	}
 
